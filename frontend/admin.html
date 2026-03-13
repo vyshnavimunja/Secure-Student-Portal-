@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <title>Admin Panel – Secure Portal</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="app-page admin-theme">
+
+  <!-- ── Top Navigation ─────────────────────────────────────────────────────── -->
+  <header class="topnav">
+    <div class="topnav-brand">
+      <div class="brand-icon-sm admin">A</div>
+      <span>Admin Panel</span>
+    </div>
+    <nav class="topnav-links" id="main-nav">
+      <a href="#dashboard"     class="nav-link active" data-section="dashboard">Dashboard</a>
+      <a href="#users"         class="nav-link"        data-section="users">Users</a>
+      <a href="#courses"       class="nav-link"        data-section="courses">Courses</a>
+      <a href="#announcements" class="nav-link"        data-section="announcements">Announcements</a>
+    </nav>
+    <div class="topnav-user">
+      <span id="nav-username" class="user-badge admin"></span>
+      <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">&#9776;</button>
+    </div>
+  </header>
+
+  <!-- ── Main Content ────────────────────────────────────────────────────────── -->
+  <main class="app-main">
+
+    <div id="admin-alert" class="alert hidden" role="alert" aria-live="polite"></div>
+
+    <!-- ── Dashboard Section ─────────────────────────────────────────────────── -->
+    <section id="section-dashboard" class="section active">
+      <h2 class="section-title">System Overview</h2>
+      <div class="stats-grid" id="admin-stats">
+        <div class="stat-card">
+          <div class="stat-icon blue">&#128100;</div>
+          <div class="stat-body"><div class="stat-value" id="stat-total-students">–</div><div class="stat-label">Total Students</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">&#9989;</div>
+          <div class="stat-body"><div class="stat-value" id="stat-active-students">–</div><div class="stat-label">Active Students</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">&#128218;</div>
+          <div class="stat-body"><div class="stat-value" id="stat-total-courses">–</div><div class="stat-label">Active Courses</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple">&#128203;</div>
+          <div class="stat-body"><div class="stat-value" id="stat-total-enrollments">–</div><div class="stat-label">Enrollments</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Users Section ──────────────────────────────────────────────────────── -->
+    <section id="section-users" class="section hidden">
+      <div class="section-header">
+        <h2 class="section-title">User Management</h2>
+        <button class="btn btn-primary" id="btn-create-user">+ New User</button>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters-bar">
+        <input type="search" id="user-search" placeholder="Search name, email, username…" class="filter-input" />
+        <select id="user-role-filter" class="filter-select">
+          <option value="">All Roles</option>
+          <option value="student">Students</option>
+          <option value="admin">Admins</option>
+        </select>
+      </div>
+
+      <div id="users-alert" class="alert hidden" role="alert"></div>
+
+      <div class="table-wrapper">
+        <table class="data-table" id="users-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Student ID</th>
+              <th>Status</th>
+              <th>Joined</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody"><tr><td colspan="8" class="loading">Loading…</td></tr></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="user-pagination"></div>
+    </section>
+
+    <!-- ── Courses Section ─────────────────────────────────────────────────────── -->
+    <section id="section-courses" class="section hidden">
+      <div class="section-header">
+        <h2 class="section-title">Course Management</h2>
+        <button class="btn btn-primary" id="btn-create-course">+ New Course</button>
+      </div>
+      <div id="courses-alert" class="alert hidden" role="alert"></div>
+      <div class="table-wrapper">
+        <table class="data-table" id="courses-table">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Name</th>
+              <th>Instructor</th>
+              <th>Credits</th>
+              <th>Semester</th>
+              <th>Enrolled</th>
+              <th>Capacity</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="courses-tbody"><tr><td colspan="9" class="loading">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Announcements Section ──────────────────────────────────────────────── -->
+    <section id="section-announcements" class="section hidden">
+      <div class="section-header">
+        <h2 class="section-title">Announcements</h2>
+        <button class="btn btn-primary" id="btn-create-ann">+ New Announcement</button>
+      </div>
+      <div id="ann-alert" class="alert hidden" role="alert"></div>
+      <div id="announcements-list"><div class="loading">Loading…</div></div>
+    </section>
+
+  </main>
+
+  <!-- ── Modals ──────────────────────────────────────────────────────────────── -->
+
+  <!-- User Modal -->
+  <div id="modal-user" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-user-title">
+    <div class="modal-overlay" id="modal-user-overlay"></div>
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-user-title">Create User</h3>
+        <button class="modal-close" id="modal-user-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="modal-user-alert" class="alert hidden" role="alert"></div>
+        <form id="user-form" novalidate>
+          <input type="hidden" id="user-form-id" />
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="uf-name">Full Name</label>
+              <input type="text" id="uf-name" name="full_name" required />
+            </div>
+            <div class="form-group">
+              <label for="uf-username">Username</label>
+              <input type="text" id="uf-username" name="username" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="uf-email">Email</label>
+            <input type="email" id="uf-email" name="email" required />
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group" id="uf-password-group">
+              <label for="uf-password">Password</label>
+              <input type="password" id="uf-password" name="password" autocomplete="new-password" />
+            </div>
+            <div class="form-group">
+              <label for="uf-role">Role</label>
+              <select id="uf-role" name="role">
+                <option value="student">Student</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" id="uf-status-group" style="display:none;">
+            <label>
+              <input type="checkbox" id="uf-active" name="is_active" /> Account Active
+            </label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost" id="modal-user-cancel">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="user-form-submit">Create User</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Course Modal -->
+  <div id="modal-course" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-course-title">
+    <div class="modal-overlay" id="modal-course-overlay"></div>
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-course-title">Create Course</h3>
+        <button class="modal-close" id="modal-course-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="modal-course-alert" class="alert hidden" role="alert"></div>
+        <form id="course-form" novalidate>
+          <input type="hidden" id="course-form-id" />
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="cf-code">Course Code</label>
+              <input type="text" id="cf-code" name="code" placeholder="e.g. CS101" />
+            </div>
+            <div class="form-group">
+              <label for="cf-credits">Credits</label>
+              <input type="number" id="cf-credits" name="credits" min="1" max="6" value="3" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="cf-name">Course Name</label>
+            <input type="text" id="cf-name" name="name" required />
+          </div>
+          <div class="form-group">
+            <label for="cf-instructor">Instructor</label>
+            <input type="text" id="cf-instructor" name="instructor" required />
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="cf-semester">Semester</label>
+              <input type="text" id="cf-semester" name="semester" placeholder="e.g. Spring 2026" />
+            </div>
+            <div class="form-group">
+              <label for="cf-capacity">Capacity</label>
+              <input type="number" id="cf-capacity" name="capacity" min="1" max="500" value="30" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="cf-description">Description</label>
+            <textarea id="cf-description" name="description" rows="3" maxlength="500"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost" id="modal-course-cancel">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="course-form-submit">Create Course</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Announcement Modal -->
+  <div id="modal-ann" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-ann-title">
+    <div class="modal-overlay" id="modal-ann-overlay"></div>
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-ann-title">Create Announcement</h3>
+        <button class="modal-close" id="modal-ann-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="modal-ann-alert" class="alert hidden" role="alert"></div>
+        <form id="ann-form" novalidate>
+          <div class="form-group">
+            <label for="af-title">Title</label>
+            <input type="text" id="af-title" name="title" required maxlength="150" />
+          </div>
+          <div class="form-group">
+            <label for="af-content">Content</label>
+            <textarea id="af-content" name="content" rows="5" required maxlength="2000"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="af-target">Audience</label>
+            <select id="af-target" name="target">
+              <option value="all">Everyone</option>
+              <option value="students">Students Only</option>
+              <option value="admins">Admins Only</option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost" id="modal-ann-cancel">Cancel</button>
+            <button type="submit" class="btn btn-primary">Publish</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Modal -->
+  <div id="modal-confirm" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-confirm-title">
+    <div class="modal-overlay" id="modal-confirm-overlay"></div>
+    <div class="modal-box modal-box-sm">
+      <div class="modal-header">
+        <h3 id="modal-confirm-title">Confirm Action</h3>
+        <button class="modal-close" id="modal-confirm-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="modal-confirm-msg"></p>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" id="confirm-cancel">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirm-ok">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Detail Modal -->
+  <div id="modal-user-detail" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-detail-title">
+    <div class="modal-overlay" id="modal-detail-overlay"></div>
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-detail-title">User Details</h3>
+        <button class="modal-close" id="modal-detail-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body" id="user-detail-body"></div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

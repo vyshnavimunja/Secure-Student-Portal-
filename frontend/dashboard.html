@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <title>Student Dashboard – Secure Portal</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="app-page">
+
+  <!-- ── Top Navigation ─────────────────────────────────────────────────────── -->
+  <header class="topnav">
+    <div class="topnav-brand">
+      <div class="brand-icon-sm">SP</div>
+      <span>Student Portal</span>
+    </div>
+    <nav class="topnav-links" id="main-nav">
+      <a href="#overview"       class="nav-link active" data-section="overview">Overview</a>
+      <a href="#my-courses"     class="nav-link"        data-section="my-courses">My Courses</a>
+      <a href="#browse-courses" class="nav-link"        data-section="browse-courses">Browse</a>
+      <a href="#announcements"  class="nav-link"        data-section="announcements">Announcements</a>
+      <a href="#profile"        class="nav-link"        data-section="profile">Profile</a>
+    </nav>
+    <div class="topnav-user">
+      <span id="nav-username" class="user-badge"></span>
+      <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">&#9776;</button>
+    </div>
+  </header>
+
+  <!-- ── Main Content ────────────────────────────────────────────────────────── -->
+  <main class="app-main">
+
+    <!-- Global alert -->
+    <div id="dash-alert" class="alert hidden" role="alert" aria-live="polite"></div>
+
+    <!-- ── Overview Section ──────────────────────────────────────────────────── -->
+    <section id="section-overview" class="section active">
+      <h2 class="section-title">Welcome back, <span id="greeting-name">Student</span>!</h2>
+
+      <div class="stats-grid" id="overview-stats">
+        <div class="stat-card">
+          <div class="stat-icon blue">&#128218;</div>
+          <div class="stat-body">
+            <div class="stat-value" id="stat-courses">–</div>
+            <div class="stat-label">Enrolled Courses</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">&#127941;</div>
+          <div class="stat-body">
+            <div class="stat-value" id="stat-credits">–</div>
+            <div class="stat-label">Total Credits</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">&#128226;</div>
+          <div class="stat-body">
+            <div class="stat-value" id="stat-announcements">–</div>
+            <div class="stat-label">Announcements</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple">&#127993;</div>
+          <div class="stat-body">
+            <div class="stat-value" id="stat-student-id">–</div>
+            <div class="stat-label">Student ID</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="overview-row">
+        <div class="card">
+          <div class="card-header"><h3>Recent Announcements</h3></div>
+          <div class="card-body" id="overview-announcements"><div class="loading">Loading…</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Your Courses</h3></div>
+          <div class="card-body" id="overview-courses"><div class="loading">Loading…</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── My Courses Section ─────────────────────────────────────────────────── -->
+    <section id="section-my-courses" class="section hidden">
+      <div class="section-header">
+        <h2 class="section-title">My Courses</h2>
+      </div>
+      <div id="my-courses-list" class="courses-grid"><div class="loading">Loading…</div></div>
+    </section>
+
+    <!-- ── Browse Courses Section ─────────────────────────────────────────────── -->
+    <section id="section-browse-courses" class="section hidden">
+      <div class="section-header">
+        <h2 class="section-title">Browse Available Courses</h2>
+      </div>
+      <div id="browse-alert" class="alert hidden" role="alert" aria-live="polite"></div>
+      <div id="browse-courses-list" class="courses-grid"><div class="loading">Loading…</div></div>
+    </section>
+
+    <!-- ── Announcements Section ──────────────────────────────────────────────── -->
+    <section id="section-announcements" class="section hidden">
+      <h2 class="section-title">Announcements</h2>
+      <div id="announcements-list"><div class="loading">Loading…</div></div>
+    </section>
+
+    <!-- ── Profile Section ────────────────────────────────────────────────────── -->
+    <section id="section-profile" class="section hidden">
+      <h2 class="section-title">My Profile</h2>
+
+      <div class="profile-grid">
+        <!-- Profile Info -->
+        <div class="card">
+          <div class="card-header"><h3>Personal Information</h3></div>
+          <div class="card-body">
+            <form id="profile-form" novalidate>
+              <div class="form-group">
+                <label>Student ID</label>
+                <input type="text" id="profile-student-id" disabled />
+              </div>
+              <div class="form-group">
+                <label for="profile-name">Full Name</label>
+                <input type="text" id="profile-name" name="full_name" required />
+              </div>
+              <div class="form-group">
+                <label for="profile-email">Email</label>
+                <input type="email" id="profile-email" name="email" required />
+              </div>
+              <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="profile-username" disabled />
+              </div>
+              <div class="form-group">
+                <label>Member Since</label>
+                <input type="text" id="profile-since" disabled />
+              </div>
+              <div id="profile-alert" class="alert hidden" role="alert"></div>
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="card">
+          <div class="card-header"><h3>Change Password</h3></div>
+          <div class="card-body">
+            <form id="password-form" novalidate>
+              <div class="form-group">
+                <label for="pw-current">Current Password</label>
+                <div class="password-wrap">
+                  <input type="password" id="pw-current" name="current_password" required />
+                  <button type="button" class="toggle-pw" data-target="pw-current" aria-label="Toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="pw-new">New Password</label>
+                <div class="password-wrap">
+                  <input type="password" id="pw-new" name="new_password" required />
+                  <button type="button" class="toggle-pw" data-target="pw-new" aria-label="Toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="pw-confirm">Confirm New Password</label>
+                <div class="password-wrap">
+                  <input type="password" id="pw-confirm" name="confirm_password" required />
+                  <button type="button" class="toggle-pw" data-target="pw-confirm" aria-label="Toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div id="pw-alert" class="alert hidden" role="alert"></div>
+              <button type="submit" class="btn btn-primary">Update Password</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

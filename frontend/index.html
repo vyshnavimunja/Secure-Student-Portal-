@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <title>Secure Student Portal – Sign In</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="auth-page">
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <!-- Logo / Brand -->
+      <div class="auth-brand">
+        <div class="brand-icon">SP</div>
+        <h1>Student Portal</h1>
+        <p class="brand-sub">Secure Academic Management System</p>
+      </div>
+
+      <!-- Tab switcher -->
+      <div class="tab-bar" role="tablist">
+        <button class="tab-btn active" id="tab-login"    role="tab" aria-selected="true"  aria-controls="panel-login">Sign In</button>
+        <button class="tab-btn"        id="tab-register" role="tab" aria-selected="false" aria-controls="panel-register">Register</button>
+      </div>
+
+      <!-- Alert area -->
+      <div id="auth-alert" class="alert hidden" role="alert" aria-live="polite"></div>
+
+      <!-- ── Login Panel ──────────────────────────────────────────────── -->
+      <div id="panel-login" role="tabpanel" aria-labelledby="tab-login">
+        <form id="login-form" novalidate autocomplete="on">
+          <div class="form-group">
+            <label for="login-username">Username</label>
+            <input type="text" id="login-username" name="username"
+                   autocomplete="username" required
+                   placeholder="Enter your username" />
+            <span class="field-error" id="login-username-err"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <div class="password-wrap">
+              <input type="password" id="login-password" name="password"
+                     autocomplete="current-password" required
+                     placeholder="Enter your password" />
+              <button type="button" class="toggle-pw" aria-label="Toggle password visibility" data-target="login-password">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <span class="field-error" id="login-password-err"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full" id="login-btn">
+            <span class="btn-text">Sign In</span>
+            <span class="spinner hidden"></span>
+          </button>
+        </form>
+      </div>
+
+      <!-- ── Register Panel ────────────────────────────────────────────── -->
+      <div id="panel-register" role="tabpanel" aria-labelledby="tab-register" class="hidden">
+        <form id="register-form" novalidate autocomplete="off">
+          <div class="form-group">
+            <label for="reg-name">Full Name</label>
+            <input type="text" id="reg-name" name="full_name"
+                   autocomplete="name" required
+                   placeholder="e.g. Jane Smith" />
+            <span class="field-error" id="reg-name-err"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-email">Email Address</label>
+            <input type="email" id="reg-email" name="email"
+                   autocomplete="email" required
+                   placeholder="you@student.edu" />
+            <span class="field-error" id="reg-email-err"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-username">Username</label>
+            <input type="text" id="reg-username" name="username"
+                   autocomplete="username" required
+                   placeholder="3–30 alphanumeric characters" />
+            <span class="field-error" id="reg-username-err"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-password">Password</label>
+            <div class="password-wrap">
+              <input type="password" id="reg-password" name="password"
+                     autocomplete="new-password" required
+                     placeholder="Min 8 chars, upper, lower, number, symbol" />
+              <button type="button" class="toggle-pw" aria-label="Toggle password visibility" data-target="reg-password">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="pw-strength" id="pw-strength">
+              <div class="pw-bar"><span id="pw-bar-fill"></span></div>
+              <small id="pw-strength-label"></small>
+            </div>
+            <span class="field-error" id="reg-password-err"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-confirm">Confirm Password</label>
+            <div class="password-wrap">
+              <input type="password" id="reg-confirm" name="confirm_password"
+                     autocomplete="new-password" required
+                     placeholder="Repeat your password" />
+              <button type="button" class="toggle-pw" aria-label="Toggle password visibility" data-target="reg-confirm">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <span class="field-error" id="reg-confirm-err"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full" id="register-btn">
+            <span class="btn-text">Create Account</span>
+            <span class="spinner hidden"></span>
+          </button>
+        </form>
+      </div>
+
+    </div><!-- /.auth-card -->
+
+    <p class="auth-footer">
+      &copy; <span id="year"></span> Secure Student Portal. All rights reserved.
+    </p>
+  </div><!-- /.auth-wrapper -->
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>
